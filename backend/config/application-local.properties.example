@@ -1,0 +1,3 @@
+spring.datasource.url=jdbc:postgresql://localhost:5432/sabor_iqueno
+spring.datasource.username=postgres
+spring.datasource.password=CAMBIAR_POR_TU_CLAVE
