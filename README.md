@@ -46,6 +46,14 @@ Mantén la terminal abierta. Abre las pantallas desde el puerto 8080, sin Live S
 
 Contraseña inicial: **Cambiar123!**. En una base anterior se conservan las cuentas y contraseñas que ya hayas configurado. Los botones del login solo rellenan los accesos demo.
 
+
+No te olvides de cambiar las contraseñas!! en PostgreSQL:
+
+UPDATE usuario
+SET password_hash = crypt('sebastian', gen_salt('bf', 10))
+WHERE email = 'caja@demo.local';
+
+
 ## 5. Funciones
 
 - Mesero: mesas, pedidos para llevar, notas, productos adicionales y anulación antes de preparar.
