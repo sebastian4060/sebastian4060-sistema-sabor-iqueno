@@ -32,7 +32,7 @@ cd backend
 mvn clean verify
 mvn spring-boot:run
 ```
-
+s
 Mantén la terminal abierta. Abre las pantallas desde el puerto 8080, sin Live Server. Al editar HTML, CSS o JS, reinicia Spring Boot y recarga con Ctrl+F5.
 
 ## 4. Acceso de demostración
