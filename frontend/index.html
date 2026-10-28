@@ -1,0 +1,738 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>El Sabor Iqueño | Sistema de Gestion de Restaurantes</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="/css/app.css" />
+  </head>
+  <body>
+    <!-- ================= LOGIN (RF14 / RNF04) ================= -->
+    <div class="login-screen" id="login-screen">
+      <div class="login-card">
+        <div class="login-aside">
+          <div>
+            <div
+              style="
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                margin-bottom: 22px;
+              "
+            >
+              <i
+                class="fa-solid fa-utensils"
+                style="font-size: 1.8rem; color: var(--accent)"
+              ></i>
+              <div>
+                <h2>El Sabor <span>Iqueño</span></h2>
+                <p
+                  style="
+                    margin: 0;
+                    font-size: 0.66rem;
+                    color: var(--accent);
+                    letter-spacing: 0.6px;
+                  "
+                >
+                  SISTEMA DE GESTION DE RESTAURANTES
+                </p>
+              </div>
+            </div>
+            <p>
+              Comanda digital, KDS en cocina, registro de cobros e inventario
+              sincronizado en una sola plataforma.
+            </p>
+          </div>
+          <div>
+            <div class="nav-section-title" style="padding: 0 0 6px">
+              USUARIOS DE DEMOSTRACION
+            </div>
+            <div class="demo-users" id="demo-users"></div>
+          </div>
+        </div>
+
+        <div class="login-body">
+          <h3>Iniciar sesion</h3>
+          <p>Ingrese con su cuenta del sistema.</p>
+
+          <div class="login-error" id="login-error"></div>
+
+          <div class="field">
+            <label>Correo electronico <span class="req">*</span></label>
+            <input
+              type="email"
+              id="login-email"
+              autocomplete="username"
+              placeholder="usuario@saboriqueno.pe"
+            />
+          </div>
+          <div class="field">
+            <label>Contrasena <span class="req">*</span></label>
+            <input
+              type="password"
+              id="login-password"
+              autocomplete="current-password"
+              placeholder="******"
+            />
+          </div>
+
+          <button class="btn btn-block" data-action="do-login">
+            <i class="fa-solid fa-right-to-bracket"></i> Ingresar al Sistema
+          </button>
+
+          <p class="login-note">
+            <i class="fa-solid fa-shield-halved"></i> Accesos de demostración:
+            <strong>Cambiar123!</strong>. Las contraseñas se almacenan con
+            BCrypt en el servidor.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= APLICACION ================= -->
+    <div id="app" style="display: none; flex: 1">
+      <!-- Sidebar Navigation -->
+      <div class="sidebar" id="sidebar">
+        <div>
+          <div class="brand-box">
+            <i class="fa-solid fa-utensils"></i>
+            <div>
+              <h2>El Sabor Iqueño</h2>
+              <p>Sistema de Restaurante</p>
+            </div>
+          </div>
+
+          <div class="nav-section-title">OPERACION</div>
+          <ul class="nav-menu">
+            <li>
+              <button
+                class="nav-item active"
+                data-action="switch-tab"
+                data-tab="mesero"
+              >
+                <i class="fa-solid fa-tablet-screen-button"></i>
+                <span class="nav-label">Modulo Mesero (9 Mesas / Llevar)</span>
+              </button>
+            </li>
+            <li>
+              <button
+                class="nav-item"
+                data-action="switch-tab"
+                data-tab="cocina"
+              >
+                <i class="fa-solid fa-fire-burner"></i>
+                <span class="nav-label">Modulo Cocina (KDS en Vivo)</span>
+                <span class="nav-badge hidden" id="badge-kds">0</span>
+              </button>
+            </li>
+            <li>
+              <button
+                class="nav-item"
+                data-action="switch-tab"
+                data-tab="cajero"
+              >
+                <i class="fa-solid fa-cash-register"></i>
+                <span class="nav-label">Modulo Caja y tickets internos</span>
+              </button>
+            </li>
+          </ul>
+
+          <div class="nav-section-title">GESTION</div>
+          <ul class="nav-menu">
+            <li>
+              <button
+                class="nav-item"
+                data-action="switch-tab"
+                data-tab="inventario"
+              >
+                <i class="fa-solid fa-boxes-stacked"></i>
+                <span class="nav-label">Inventario, Compras y Kardex</span>
+                <span class="nav-badge hidden" id="badge-stock">0</span>
+              </button>
+            </li>
+            <li>
+              <button
+                class="nav-item"
+                data-action="switch-tab"
+                data-tab="reportes"
+              >
+                <i class="fa-solid fa-chart-pie"></i>
+                <span class="nav-label">Reportes Gerenciales</span>
+              </button>
+            </li>
+          </ul>
+
+          <div class="nav-section-title">ADMINISTRACION</div>
+          <ul class="nav-menu">
+            <li>
+              <button
+                class="nav-item"
+                data-action="switch-tab"
+                data-tab="admin"
+              >
+                <i class="fa-solid fa-user-shield"></i>
+                <span class="nav-label">Usuarios, Roles y Auditoria</span>
+              </button>
+            </li>
+          </ul>
+        </div>
+
+        <div class="sidebar-user">
+          <div class="su-row">
+            <div class="su-avatar" id="su-avatar">AD</div>
+            <div>
+              <div class="su-name" id="su-name">Usuario</div>
+              <div class="su-role" id="su-role">ROL</div>
+            </div>
+          </div>
+          <div class="su-meta" id="su-meta">Sesión autenticada</div>
+          <button class="su-logout" data-action="do-logout">
+            <i class="fa-solid fa-power-off"></i> Cerrar sesion
+          </button>
+        </div>
+      </div>
+
+      <!-- Main Workspace -->
+      <div class="main-container">
+        <div class="top-navbar">
+          <div
+            style="display: flex; align-items: center; gap: 12px; min-width: 0"
+          >
+            <button class="nav-hamburger" data-action="toggle-sidebar">
+              <i class="fa-solid fa-bars"></i>
+            </button>
+            <h1 id="nav-title">
+              Módulo Mesero - Selección de Mesa o Pedido Para Llevar
+            </h1>
+          </div>
+          <div class="top-right">
+            <div class="system-status" id="connection-state">
+              <i class="fa-solid fa-circle" style="font-size: 0.5rem"></i>
+              Conectando…
+            </div>
+            <div class="top-user-chip" id="top-user-chip">
+              <i class="fa-solid fa-user"></i>
+              <span id="top-user-name">Usuario</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="content-body">
+          <!-- ============ PANEL 1: MESERO ============ -->
+          <div id="panel-mesero" class="tab-panel active">
+            <div id="view-tables-selector">
+              <div class="page-head">
+                <div>
+                  <h2>Salon - Seleccion de Mesa</h2>
+                  <p>
+                    Seleccione una mesa del salon o registre un pedido para
+                    llevar. El estado se actualiza en tiempo real con el KDS.
+                  </p>
+                </div>
+                <button class="btn" data-action="open-takeaway">
+                  <i class="fa-solid fa-bag-shopping"></i> + Nuevo Pedido Para
+                  Llevar
+                </button>
+              </div>
+
+              <div class="tables-grid" id="nine-tables-grid"></div>
+
+              <div class="card" style="margin-top: 18px">
+                <div class="card-title">
+                  <span>Pedidos Para Llevar Activos</span
+                  ><span class="badge badge-neutral" id="tw-count-badge"
+                    >0</span
+                  >
+                </div>
+                <div id="mesero-takeaway-list"></div>
+              </div>
+            </div>
+
+            <div id="view-order-builder" style="display: none">
+              <div class="waiter-view">
+                <div class="menu-selection-card">
+                  <div
+                    style="
+                      display: flex;
+                      justify-content: space-between;
+                      align-items: center;
+                      gap: 10px;
+                      flex-wrap: wrap;
+                    "
+                  >
+                    <h3
+                      id="order-target-title"
+                      style="
+                        font-size: 1.1rem;
+                        font-weight: 800;
+                        color: var(--secondary);
+                      "
+                    >
+                      Registrando Pedido: Mesa 01
+                    </h3>
+                    <div style="display: flex; gap: 8px">
+                      <button
+                        class="btn btn-secondary btn-sm"
+                        data-action="open-comandas"
+                        id="btn-ver-comandas"
+                      >
+                        <i class="fa-solid fa-receipt"></i> Comandas (0)
+                      </button>
+                      <button
+                        class="btn btn-secondary btn-sm"
+                        data-action="back-to-tables"
+                      >
+                        <i class="fa-solid fa-arrow-left"></i> Cambiar Mesa /
+                        Volver
+                      </button>
+                    </div>
+                  </div>
+
+                  <div class="inline-note" id="order-note-box">
+                    <i class="fa-solid fa-circle-info"></i>
+                    <span
+                      >Seleccione la cantidad de platos y bebidas solicitados
+                      por el cliente. Al confirmar la comanda, el stock se
+                      descuenta automaticamente del inventario (RF09).</span
+                    >
+                  </div>
+
+                  <div class="subtabs" id="menu-categories"></div>
+
+                  <div class="menu-items-list" id="full-menu-list"></div>
+                </div>
+
+                <div class="order-summary-card">
+                  <h3
+                    style="
+                      font-size: 1rem;
+                      font-weight: 800;
+                      border-bottom: 1px solid var(--border-color);
+                      padding-bottom: 10px;
+                    "
+                  >
+                    Resumen del Pedido
+                  </h3>
+
+                  <div id="client-name-container" style="display: none">
+                    <div class="field">
+                      <label
+                        >Nombre del Cliente (Para Llevar):
+                        <span class="req" style="color: var(--danger)"
+                          >*</span
+                        ></label
+                      >
+                      <input
+                        type="text"
+                        id="input-client-name"
+                        placeholder="Ej. Carlos Mendoza"
+                      />
+                    </div>
+                  </div>
+
+                  <div class="summary-items" id="summary-items-list"></div>
+
+                  <div
+                    style="
+                      border-top: 1px solid var(--border-color);
+                      padding-top: 12px;
+                    "
+                  >
+                    <div class="total-line" style="margin-bottom: 14px">
+                      <span>Total a Pagar:</span>
+                      <span id="summary-total">S/ 0.00</span>
+                    </div>
+                    <button
+                      class="btn btn-success btn-block"
+                      data-action="send-order"
+                      id="btn-send-order"
+                    >
+                      <i class="fa-solid fa-paper-plane"></i> Enviar Pedido a
+                      Cocina
+                    </button>
+                    <button
+                      class="btn btn-secondary btn-block btn-sm"
+                      style="margin-top: 8px"
+                      data-action="clear-selection"
+                    >
+                      <i class="fa-solid fa-eraser"></i> Limpiar seleccion
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ============ PANEL 2: COCINA KDS ============ -->
+          <div id="panel-cocina" class="tab-panel">
+            <div class="page-head">
+              <div>
+                <h2>Kitchen Display System (KDS)</h2>
+                <p>
+                  Comandas ordenadas por tiempo de espera.
+                  <span style="color: #047857; font-weight: 700"
+                    >Verde &lt; 10 min</span
+                  >
+                  /
+                  <span style="color: #b45309; font-weight: 700"
+                    >Amarillo 10-20 min</span
+                  >
+                  /
+                  <span style="color: #b91c1c; font-weight: 700"
+                    >Rojo &gt; 20 min</span
+                  >.
+                </p>
+              </div>
+              <div style="display: flex; gap: 8px">
+                <button class="btn btn-secondary btn-sm" data-action="refresh">
+                  <i class="fa-solid fa-rotate"></i> Actualizar
+                </button>
+                <button
+                  class="btn btn-secondary btn-sm"
+                  data-action="print-comandas"
+                >
+                  <i class="fa-solid fa-print"></i> Imprimir comandas activas
+                </button>
+              </div>
+            </div>
+
+            <div class="kds-container">
+              <div class="kds-column">
+                <div
+                  class="kds-col-header"
+                  style="background: #fef3c7; color: #b45309"
+                >
+                  <span>1. Pedidos Pendientes</span
+                  ><span class="badge badge-warn" id="count-pend">0</span>
+                </div>
+                <div class="kds-cards-wrapper" id="kds-col-pendientes"></div>
+              </div>
+
+              <div class="kds-column">
+                <div
+                  class="kds-col-header"
+                  style="background: #dbeafe; color: #1d4ed8"
+                >
+                  <span>2. En Preparacion</span
+                  ><span class="badge badge-info" id="count-prep">0</span>
+                </div>
+                <div class="kds-cards-wrapper" id="kds-col-prep"></div>
+              </div>
+
+              <div class="kds-column">
+                <div
+                  class="kds-col-header"
+                  style="background: #def7ec; color: #047857"
+                >
+                  <span>3. Listos para Entregar</span
+                  ><span class="badge badge-ok" id="count-ready">0</span>
+                </div>
+                <div class="kds-cards-wrapper" id="kds-col-ready"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ============ PANEL 3: CAJERO ============ -->
+          <div id="panel-cajero" class="tab-panel">
+            <div class="page-head">
+              <div>
+                <h2>Caja y tickets internos</h2>
+                <p>
+                  La cuenta se consolida automaticamente desde las comandas
+                  enviadas por los mozos (RF05).
+                </p>
+              </div>
+              <div class="inline-note" style="max-width: 340px">
+                <i class="fa-solid fa-receipt"></i>
+                <span
+                  >Se registra un
+                  <strong>ticket interno sin validez tributaria</strong>. El RUC
+                  es opcional.</span
+                >
+              </div>
+            </div>
+
+            <div class="cashier-layout">
+              <div class="card">
+                <div class="card-title">
+                  <span>Seleccione la Mesa o Pedido Para Llevar a Cobrar</span
+                  ><span class="badge badge-neutral" id="cashier-open-count"
+                    >0 cuentas abiertas</span
+                  >
+                </div>
+
+                <p
+                  style="
+                    font-size: 0.78rem;
+                    font-weight: 800;
+                    color: #64748b;
+                    margin-bottom: 8px;
+                  "
+                >
+                  Mesas del Salon (1 al 9):
+                </p>
+                <div
+                  class="tables-grid"
+                  id="cashier-tables-grid"
+                  style="margin-bottom: 20px"
+                ></div>
+
+                <p
+                  style="
+                    font-size: 0.78rem;
+                    font-weight: 800;
+                    color: #64748b;
+                    margin-bottom: 8px;
+                  "
+                >
+                  Pedidos Para Llevar Listos:
+                </p>
+                <div
+                  id="cashier-takeaway-list"
+                  style="display: flex; flex-direction: column; gap: 10px"
+                ></div>
+              </div>
+
+              <div class="card" id="cashier-detail-panel">
+                <div class="card-title">
+                  <span id="cashier-title-panel">Detalle de Cuenta</span
+                  ><span class="badge badge-neutral" id="cashier-comanda-count"
+                    >0 comandas</span
+                  >
+                </div>
+
+                <div
+                  id="cashier-items-summary"
+                  style="font-size: 0.85rem; color: #64748b"
+                >
+                  Seleccione una mesa o pedido para llevar activo.
+                </div>
+
+                <div id="cashier-split-area" style="margin-top: 12px"></div>
+
+                <div style="margin-top: 14px">
+                  <p
+                    style="
+                      font-size: 0.78rem;
+                      font-weight: 800;
+                      color: #64748b;
+                      margin-bottom: 6px;
+                    "
+                  >
+                    Datos del Comprobante
+                  </p>
+                  <div class="form-grid">
+                    <div class="field">
+                      <label>Numero de RUC (11 digitos):</label>
+                      <input
+                        type="text"
+                        id="input-ruc"
+                        placeholder="Ej. 20601234567"
+                        maxlength="11"
+                        inputmode="numeric"
+                        class="input-sm"
+                      />
+                    </div>
+                  </div>
+                  <div class="field" id="ruc-error" style="display: none">
+                    <span
+                      style="
+                        font-size: 0.75rem;
+                        color: var(--danger);
+                        font-weight: 600;
+                      "
+                      >El RUC debe tener 11 digitos numericos.</span
+                    >
+                  </div>
+                </div>
+
+                <div>
+                  <p
+                    style="
+                      font-size: 0.78rem;
+                      font-weight: 800;
+                      color: #64748b;
+                      margin-bottom: 6px;
+                    "
+                  >
+                    Metodo de Pago:
+                  </p>
+                  <div class="payment-options" id="payment-options">
+                    <div
+                      class="pay-method-btn active"
+                      data-action="select-paymethod"
+                      data-method="efectivo"
+                    >
+                      <i class="fa-solid fa-money-bill-wave"></i> Efectivo
+                    </div>
+                    <div
+                      class="pay-method-btn"
+                      data-action="select-paymethod"
+                      data-method="tarjeta"
+                    >
+                      <i class="fa-solid fa-credit-card"></i> Tarjeta
+                    </div>
+                    <div
+                      class="pay-method-btn"
+                      data-action="select-paymethod"
+                      data-method="digital"
+                    >
+                      <i class="fa-solid fa-qrcode"></i> Digital
+                    </div>
+                  </div>
+                </div>
+
+                <div id="cashier-cobro-extra"></div>
+
+                <div
+                  style="
+                    border-top: 1px solid var(--border-color);
+                    margin-top: 12px;
+                    padding-top: 12px;
+                  "
+                >
+                  <div class="total-line">
+                    <span>Total Consumo:</span>
+                    <span id="cashier-total-amount">S/ 0.00</span>
+                  </div>
+                  <button
+                    class="btn btn-success btn-block"
+                    style="margin-top: 14px"
+                    data-action="process-payment"
+                    id="btn-process-pay"
+                    disabled
+                  >
+                    <i class="fa-solid fa-file-invoice"></i> Registrar pago y
+                    ticket interno
+                  </button>
+                  <button
+                    class="btn btn-secondary btn-block btn-sm"
+                    style="margin-top: 8px"
+                    data-action="open-split"
+                    id="btn-split"
+                    disabled
+                  >
+                    <i class="fa-solid fa-people-arrows-left-right"></i>
+                    Calcular reparto entre comensales
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ============ PANEL 4: INVENTARIO ============ -->
+          <div id="panel-inventario" class="tab-panel">
+            <div class="page-head">
+              <div>
+                <h2>Inventario, Compras y Kardex</h2>
+                <p>
+                  Control de stock sincronizado con cada transaccion: entradas
+                  por compra, salidas por comanda y ajustes por merma.
+                </p>
+              </div>
+              <button class="btn btn-secondary btn-sm" data-action="conciliar">
+                <i class="fa-solid fa-scale-balanced"></i> Conciliar stock
+                (RNF06)
+              </button>
+            </div>
+
+            <div class="subtabs" id="inv-tabs">
+              <button
+                class="subtab active"
+                data-action="inv-tab"
+                data-sub="insumos"
+              >
+                <i class="fa-solid fa-box"></i> Insumos
+              </button>
+              <button class="subtab" data-action="inv-tab" data-sub="compras">
+                <i class="fa-solid fa-truck"></i> Registrar Compra (RF11)
+              </button>
+              <button class="subtab" data-action="inv-tab" data-sub="kardex">
+                <i class="fa-solid fa-list-check"></i> Kardex / Movimientos
+              </button>
+            </div>
+
+            <div id="inv-body"></div>
+          </div>
+
+          <!-- ============ PANEL 5: REPORTES ============ -->
+          <div id="panel-reportes" class="tab-panel">
+            <div class="page-head">
+              <div>
+                <h2>Reportes Gerenciales</h2>
+                <p>
+                  Ventas registradas por fecha, método de pago y productos
+                  vendidos.
+                </p>
+              </div>
+              <button
+                class="btn btn-secondary btn-sm"
+                data-action="export-reporte"
+              >
+                <i class="fa-solid fa-file-csv"></i> Exportar CSV
+              </button>
+            </div>
+
+            <div id="rep-body"></div>
+          </div>
+
+          <!-- ============ PANEL 6: ADMINISTRACION ============ -->
+          <div id="panel-admin" class="tab-panel">
+            <div class="page-head">
+              <div>
+                <h2>Administracion del Sistema</h2>
+                <p>
+                  Usuarios y roles (RF13), personal y turnos, bitacora de
+                  auditoria (RF15) y mantenimiento de menu con recetas.
+                </p>
+              </div>
+            </div>
+
+            <div class="subtabs" id="adm-tabs">
+              <button
+                class="subtab active"
+                data-action="adm-tab"
+                data-sub="usuarios"
+              >
+                <i class="fa-solid fa-users"></i> Usuarios y Roles
+              </button>
+              <button class="subtab" data-action="adm-tab" data-sub="personal">
+                <i class="fa-solid fa-id-badge"></i> Personal y Turnos
+              </button>
+              <button class="subtab" data-action="adm-tab" data-sub="auditoria">
+                <i class="fa-solid fa-clipboard-list"></i> Auditoria (RF15)
+              </button>
+              <button class="subtab" data-action="adm-tab" data-sub="menu">
+                <i class="fa-solid fa-utensils"></i> Menu y Recetas
+              </button>
+            </div>
+
+            <div id="adm-body"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal generico -->
+    <div class="modal-overlay" id="app-modal">
+      <div class="modal-card" id="modal-card">
+        <h3 id="modal-title">Titulo</h3>
+        <div id="modal-body"></div>
+        <div class="modal-footer" id="modal-footer"></div>
+      </div>
+    </div>
+
+    <div class="toast-stack" id="toast-stack"></div>
+    <div id="print-area"></div>
+
+    <script src="/js/app.js" defer></script>
+  </body>
+</html>
