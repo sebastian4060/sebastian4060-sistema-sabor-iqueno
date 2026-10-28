@@ -1,0 +1,6 @@
+backend/target/
+backend/logs/
+backend/config/application-local.properties
+.env
+.idea/
+*.iml
